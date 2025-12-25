@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>IKKISH Practice World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<!-- ===== TOP BANNER / HEADER ===== -->
+<header class="top-header">
+  <div class="logo">
+    IKKISH <span>PREP</span>
+  </div>
+
+  <button class="login-btn">
+    Login
+  </button>
+</header>
+
+<!-- ===== FRONT PAGE ===== -->
+<div id="levelScreen" class="level-screen">
+  <div class="home-card">
+
+    <h1>Welcome to <span>IKKISH Practice</span></h1>
+    <p class="subtitle">Practice smart. Crack exams faster.</p>
+
+    <!-- SUBJECT -->
+    <div class="subject-row">
+      <button class="subject-card active" data-subject="simplification">
+        Simplification
+      </button>
+      <button class="subject-card" data-subject="approximation">
+        Approximation
+      </button>
+    </div>
+
+    <!-- DIFFICULTY -->
+    <div class="field">
+      <label>Select Difficulty Level</label>
+      <select id="difficultySelect">
+        <option value="">-- Select Difficulty --</option>
+        <option value="easy">Easy</option>
+        <option value="moderate">Moderate</option>
+        <option value="hard">Hard</option>
+      </select>
+    </div>
+
+    <button id="startBtn" class="start-btn" disabled>
+      START PRACTICE
+    </button>
+
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div class="container" id="quizContainer" style="display:none;">
+
+  <div id="quiz" class="quiz-card">
+
+  <!-- CARD HEADER -->
+  <div class="card-topbar">
+    <div id="qno">Q 1 / 5</div>
+
+    <div id="levelBadge" class="level-badge easy">EASY</div>
+
+    <div id="timer">⏱ 0s</div>
+  </div>
+
+  <!-- QUESTION -->
+  <div id="questionText"></div>
+
+  <!-- OPTIONS -->
+  <div id="options"></div>
+
+  <!-- CARD FOOTER -->
+  <div class="card-footer">
+    <button id="skipBtn" class="skip-btn">Skip</button>
+    <button id="submitBtn">Submit & Next</button>
+  </div>
+
+</div>
+  <!-- ===== RESULT SECTION ===== -->
+
+ <div id="result" class="result hidden">
+
+  <h2 class="result-title">Your Result</h2>
+
+  <!-- STATS GRID -->
+  <div class="stats-grid">
+    <div class="stat-card green">Correct<br><b id="rCorrect">0</b></div>
+    <div class="stat-card red">Wrong<br><b id="rWrong">0</b></div>
+    <div class="stat-card blue">Score<br><b id="rScore">0</b></div>
+
+    <div class="stat-card purple">Accuracy<br><b id="rAccuracy">0%</b></div>
+    <div class="stat-card gray">Percentile<br><b id="rPercentile">0%</b></div>
+    <div class="stat-card black">Avg Time<br><b id="rAvgTime">0s</b></div>
+    <div class="stat-card green">Total Time<br><b id="rTotalTime">0s</b></div>
+  </div>
+
+  <!-- GRAPHS -->
+  <div class="graph-grid">
+    <div class="graph-box">
+      <h4>Last 5 Tests<br>Time vs Score</h4>
+      <canvas id="historyChart"></canvas>
+    </div>
+
+    <div class="graph-box">
+      <h4>Topper vs Average vs You</h4>
+      <canvas id="compareChart"></canvas>
+    </div>
+  </div>
+
+  <button id="retakeBtn" class="retake-btn">Retake Test</button>
+
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="level_easy.js"></script>
+<script src="level_moderate.js"></script> 
+<script src="level_hard.js"></script>
+<script src ="core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+
+<script>
+  const subjectBtns = document.querySelectorAll(".subject-card");
+  const difficultySelect = document.getElementById("difficultySelect");
+  const startBtn = document.getElementById("startBtn");
+
+  let selectedSubject = "simplification";
+
+  subjectBtns.forEach(btn => {
+    btn.onclick = () => {
+      subjectBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedSubject = btn.dataset.subject;
+    };
+  });
+
+  difficultySelect.onchange = () => {
+    startBtn.disabled = !difficultySelect.value;
+    startBtn.classList.toggle("enabled", !!difficultySelect.value);
+  };
+
+  startBtn.onclick = () => {
+    SELECTED_LEVEL = difficultySelect.value;
+    window.SELECTED_SUBJECT = selectedSubject;
+
+    document.getElementById("levelScreen").style.display = "none";
+    document.getElementById("quizContainer").style.display = "block";
+
+    startTest();
+  };
+</script>
+
+</body>
+</html>
